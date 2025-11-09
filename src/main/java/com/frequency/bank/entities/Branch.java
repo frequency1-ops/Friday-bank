@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Branch {
-	boolean sw = true;
+	
+	private Integer branchID;
+	private String branchName;
 
 }

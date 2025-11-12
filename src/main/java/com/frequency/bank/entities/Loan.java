@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,11 +21,9 @@ public class Loan {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "loan_id")
+	@Column(name = "loan_id", columnDefinition = "BINARY(16)")
 	private UUID loanId;
 	
-	@Column(name = "customer_id")
-	private UUID customerId;
 	
 	@Column(name = "amount")
 	private BigDecimal amount;
@@ -40,5 +40,9 @@ public class Loan {
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
 	private LoanStatus status;
+	
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 
 }

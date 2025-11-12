@@ -10,23 +10,23 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "Card")
 public class Card {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "card_id")
+	@Column(name = "card_id", columnDefinition = "BINARY(16)")
 	private UUID cardId;
 	
-	@Column(name = "customer_id")
-	private UUID customerId;
-	
-	@Column(name = "account_id")
-	private UUID accountId;
 	
 	@Column(name = "card_number")
 	private String cardNumber;
@@ -40,5 +40,13 @@ public class Card {
 	
 	@Column(name = "cvv")
 	private String cvv;
+	
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
+	
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
 
 }

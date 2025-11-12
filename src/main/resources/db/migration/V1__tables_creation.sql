@@ -25,7 +25,7 @@ CREATE TABLE Employee (
     branch_id BINARY(16),
     first_name VARCHAR(100),
     last_name VARCHAR(100),
-    position VARCHAR(100),
+    role enum("EMPLOYEE", "MANAGER") DEFAULT "EMPLOYEE",
     hire_date DATE,
     salary DECIMAL(15,2),
     FOREIGN KEY (branch_id) REFERENCES Branch(branch_id) ON DELETE SET NULL
@@ -36,7 +36,7 @@ ALTER TABLE Branch
 ADD CONSTRAINT fk_branch_manager
 FOREIGN KEY (bank_manager_id) REFERENCES Employee(employee_id) ON DELETE SET NULL;
 
--- 5. Account table
+-- 5. Account tableflyway_schema_history
 CREATE TABLE Account (
     account_id BINARY(16) PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID())),
     customer_id BINARY(16),

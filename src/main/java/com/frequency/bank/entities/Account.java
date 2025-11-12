@@ -2,6 +2,9 @@ package com.frequency.bank.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -11,24 +14,29 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 
-@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Account")
+@Entity
 public class Account {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "account_id")
+	@Column(name = "account_id", columnDefinition = "BINARY(16)")
 	private UUID accountId;
-	
-	@Column(name = "customer_id")
-	private UUID customerId;
-	
-	@Column(name = "branch_id")
-	private UUID branchId;
 	
 	@Column(name = "account_number")
 	private String accountNumber;
@@ -42,5 +50,21 @@ public class Account {
 	
 	@Column(name= "created_at")
 	private LocalDateTime createdAt;
+	
+	@ManyToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
+	
+	@OneToMany(mappedBy = "account")
+	private List<Card> cards = new ArrayList<Card>();
+	
+	@OneToMany(mappedBy = "account")
+	private List<Transaction> transactions = new ArrayList<Transaction>();
+	
+	@ManyToOne
+	@JoinColumn(name = "branch_id")
+	private Branch branch;
+
+	
 
 }

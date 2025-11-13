@@ -46,7 +46,7 @@ public class Customer {
 	@Column(name = "date_of_birth")
 	private LocalDate dateOfBirth;
 	
-	@Column(name = "created_at")
+	@Column(name = "created_at", updatable = false, insertable = false)
 	private LocalDateTime createdAt;
 	
 	@OneToMany(mappedBy = "customer")

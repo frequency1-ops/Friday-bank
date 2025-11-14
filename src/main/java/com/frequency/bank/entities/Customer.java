@@ -40,6 +40,9 @@ public class Customer {
 	@Column(name = "phone")
 	private String phone;
 	
+	@Column(name = "password")
+	private String password;
+	
 	@Column(name = "address")
 	private String address;
 	

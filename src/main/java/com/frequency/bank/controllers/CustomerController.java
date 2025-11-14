@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,6 +16,7 @@ import com.frequency.bank.dtos.RegisterCustomerRequest;
 import com.frequency.bank.mappers.CustomerMapper;
 import com.frequency.bank.repositories.CustomerRepository;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -42,7 +42,7 @@ public class CustomerController {
 	}
 	@PostMapping()
 	public ResponseEntity<CustomerDto> registerCustomer(
-			@RequestBody RegisterCustomerRequest request,
+			@RequestBody @Valid RegisterCustomerRequest request,
 			UriComponentsBuilder uriBuilder
 			){
 		

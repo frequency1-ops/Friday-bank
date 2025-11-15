@@ -51,5 +51,6 @@ public class CustomerController {
 		var customerDto = customerMapper.toDto(customer);
 		var uri = uriBuilder.path("/customers/{customerId}").buildAndExpand(customerDto.getCustomerId()).toUri();
 		return ResponseEntity.created(uri).body(customerDto);
+		//added a comment
 	}
 }

@@ -2,6 +2,7 @@ package com.frequency.bank.controllers;
 
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.frequency.bank.dtos.ChangePasswordRequest;
 import com.frequency.bank.dtos.CustomerDto;
 import com.frequency.bank.dtos.RegisterCustomerRequest;
 import com.frequency.bank.dtos.UpdateCustomerRequest;
@@ -76,6 +78,19 @@ public class CustomerController {
 		customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
 		customerRepository.deleteById(customerId);
 		
+		return ResponseEntity.noContent().build();
+	}
+	@PostMapping("/{id}/change-password")
+	public ResponseEntity<Void> changePassword(
+			@PathVariable(name = "id") UUID customerId,
+			@RequestBody ChangePasswordRequest request
+			){
+		var customer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
+		if(!customer.getPassword().equals(request.getOldPassword())) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		customer.setPassword(request.getNewPassword());
+		customerRepository.save(customer);
 		return ResponseEntity.noContent().build();
 	}
 }

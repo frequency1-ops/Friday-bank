@@ -30,14 +30,12 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
-	private final CustomerRepository customerRepository;
-	private final CustomerMapper customerMapper;
+	
 	private final CustomerService customerService;
 	
 	@GetMapping
-	public Iterable<CustomerDto> getAllCustomers(){
-		return customerRepository.findAll().stream()
-				.map(customerMapper::toDto).toList();
+	public ResponseEntity<Iterable<CustomerDto>> getAllCustomers(){
+		return ResponseEntity.ok(customerService.getAllCustomers());
 	}
 	
 	@GetMapping("/{id}")
@@ -61,18 +59,15 @@ public class CustomerController {
 			@RequestBody UpdateCustomerRequest request
 			){
 		
-		var customer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
-		customerMapper.updateCustomer(request, customer);
-		customerRepository.save(customer);
-		return ResponseEntity.ok(customerMapper.toDto(customer));
+		var customerDto = customerService.updateCustomer(request, customerId);
+		return ResponseEntity.ok(customerDto);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCustomer(
 			@PathVariable(name = "id") UUID customerId
 			){
 		
-		customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
-		customerRepository.deleteById(customerId);
+		customerService.deleteCustomer(customerId);
 		
 		return ResponseEntity.noContent().build();
 	}
@@ -81,12 +76,7 @@ public class CustomerController {
 			@PathVariable(name = "id") UUID customerId,
 			@RequestBody ChangePasswordRequest request
 			){
-		var customer = customerRepository.findById(customerId).orElseThrow(CustomerNotFoundException::new);
-		if(!customer.getPassword().equals(request.getOldPassword())) {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-		customer.setPassword(request.getNewPassword());
-		customerRepository.save(customer);
+		customerService.changePassword(customerId, request);
 		return ResponseEntity.noContent().build();
 	}
 }

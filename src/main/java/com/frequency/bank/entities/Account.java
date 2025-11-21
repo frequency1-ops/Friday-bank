@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -45,10 +47,11 @@ public class Account {
 	@Enumerated(EnumType.STRING)
 	private AccountType accountType;
 	
-	@Column(name = "balance")
-	private BigDecimal balance;
+	@Column(name = "balance", columnDefinition = "DECIMAL(15,2) DEFAULT 0.0")
+	private BigDecimal balance = BigDecimal.ZERO;
 	
-	@Column(name= "created_at")
+	@Column(name= "created_at", updatable = false)
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	@ManyToOne

@@ -21,6 +21,7 @@ import com.frequency.bank.dtos.UpdateCustomerRequest;
 import com.frequency.bank.exceptions.CustomerNotFoundException;
 import com.frequency.bank.mappers.CustomerMapper;
 import com.frequency.bank.repositories.CustomerRepository;
+import com.frequency.bank.service.CustomerService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ import lombok.AllArgsConstructor;
 public class CustomerController {
 	private final CustomerRepository customerRepository;
 	private final CustomerMapper customerMapper;
+	private final CustomerService customerService;
 	
 	@GetMapping
 	public Iterable<CustomerDto> getAllCustomers(){
@@ -40,11 +42,7 @@ public class CustomerController {
 	
 	@GetMapping("/{id}")
 	private ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "id") UUID customerId){
-		var customer = customerRepository.findById(customerId).orElse(null);
-		if (customer == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(customerMapper.toDto(customer));
+		return ResponseEntity.ok(customerService.getCustomerById(customerId));
 	}
 	@PostMapping()
 	public ResponseEntity<CustomerDto> registerCustomer(
@@ -52,9 +50,7 @@ public class CustomerController {
 			UriComponentsBuilder uriBuilder
 			){
 		
-		var customer = customerMapper.toEntity(request);
-		customerRepository.save(customer);
-		var customerDto = customerMapper.toDto(customer);
+		var customerDto = customerService.registerCustomer(request);
 		var uri = uriBuilder.path("/customers/{customerId}").buildAndExpand(customerDto.getCustomerId()).toUri();
 		return ResponseEntity.created(uri).body(customerDto);
 		

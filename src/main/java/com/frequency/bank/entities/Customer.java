@@ -60,6 +60,6 @@ public class Customer {
 	
 	@OneToMany(mappedBy = "customer")
 	private List<Loan> loans = new ArrayList<Loan>();
-
+	
 	
 }

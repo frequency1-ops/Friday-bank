@@ -2,6 +2,7 @@ package com.frequency.bank.dtos;
 
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,5 +33,10 @@ public class RegisterCustomerRequest {
 	
 	@NotBlank(message = "Addresses cannot be left blank")
 	private String address;
+	
+	@NotBlank(message = "branch cannot be null")
+	private String branchName;
+	
+	
 	
 }

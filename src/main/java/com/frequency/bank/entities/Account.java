@@ -67,6 +67,12 @@ public class Account {
 	@ManyToOne
 	@JoinColumn(name = "branch_id")
 	private Branch branch;
+	
+	public String generateAccountNumber() {
+	       
+        long random = (long) (Math.random() * 1_000_000_000L);
+        return String.format("%09d", random);
+    }
 
 	
 

@@ -35,7 +35,7 @@ public class CustomerController {
 	
 	@GetMapping
 	public ResponseEntity<Iterable<CustomerDto>> getAllCustomers(){
-		return ResponseEntity.ok(customerService.getAllCustomers());
+		return ResponseEntity.ok(customerService.getAllCustomers());  
 	}
 	
 	@GetMapping("/{id}")

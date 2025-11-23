@@ -48,7 +48,7 @@ public class CustomerService {
 		var account = new Account();
 		account.setCustomer(customer);
 		account.setBranch(branch);
-		account.setAccountNumber(generateAccountNumber());
+		account.setAccountNumber(account.generateAccountNumber());
 		account.setAccountType(AccountType.SAVINGS);
 		accountRepository.save(account);
 		return customerMapper.toDto(customer);
@@ -82,10 +82,6 @@ public class CustomerService {
 	
 	
 	
-	private String generateAccountNumber() {
-       
-        long random = (long) (Math.random() * 1_000_000_000L);
-        return String.format("%09d", random);
-    }
+
 
 }

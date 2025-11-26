@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frequency.bank.dtos.AccountDto;
+import com.frequency.bank.dtos.ChangeAccountTypeRequest;
 import com.frequency.bank.dtos.CreateAccountRequest;
+import com.frequency.bank.entities.AccountType;
 import com.frequency.bank.mappers.AccountMapper;
 import com.frequency.bank.repositories.AccountRepository;
 import com.frequency.bank.repositories.CustomerRepository;
@@ -67,11 +69,16 @@ public class AccountController {
 	}
 	@PostMapping("/{id}/change-accountType")
 	public ResponseEntity<Void> changeAccountType(
-			@PathVariable(name = "id") UUID customerID
+			@PathVariable(name = "id") UUID accountId,
+			@RequestBody ChangeAccountTypeRequest request
 			){
 		// unfinished get back to this
-		var account = accountRepository.findById(customerID).orElseThrow();
+		var account = accountRepository.findById(accountId).orElseThrow();
+		var type = request.getAccountType();
+		AccountType accountType = AccountType.valueOf(type.toUpperCase());
+		account.setAccountType(accountType);
+		accountRepository.save(account);
 		
-		return null;
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -61,9 +61,9 @@ public class AccountController {
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteAccount(
-			@PathVariable(name = "id") UUID  accountUuid
+			@PathVariable(name = "id") UUID  accountId
 			){
-		var account = accountRepository.findById(accountUuid).orElseThrow();
+		var account = accountRepository.findById(accountId).orElseThrow();
 		accountRepository.delete(account);
 		return ResponseEntity.noContent().build();
 	}
@@ -72,13 +72,11 @@ public class AccountController {
 			@PathVariable(name = "id") UUID accountId,
 			@RequestBody ChangeAccountTypeRequest request
 			){
-		// unfinished get back to this
 		var account = accountRepository.findById(accountId).orElseThrow();
 		var type = request.getAccountType();
 		AccountType accountType = AccountType.valueOf(type.toUpperCase());
 		account.setAccountType(accountType);
-		accountRepository.save(account);
-		
+		accountRepository.save(account);	
 		return ResponseEntity.noContent().build();
 	}
 }

@@ -78,6 +78,6 @@ public class AccountController {
 		account.setAccountType(accountType);
 		accountRepository.save(account);	
 		return ResponseEntity.noContent().build();
-		// a small comment to keep my greens
+		
 	}
 }

@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("accounts")
+@RequestMapping("/accounts")
 public class AccountController {
 	
 	private final AccountMapper accountMapper;
@@ -56,10 +56,10 @@ public class AccountController {
 		accountRepository.save(account);
 		customer.getAccounts().add(account);
 		customerRepository.save(customer);
-		//Hello comment
+		
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
-		//nothing
+		
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteAccount(

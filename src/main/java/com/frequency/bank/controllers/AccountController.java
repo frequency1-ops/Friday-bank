@@ -32,10 +32,10 @@ public class AccountController {
 	private final CustomerRepository customerRepository;
 	
 	@GetMapping
-	public Iterable<AccountDto> getAllAccounts(){
-		return accountRepository.findAll()
+	public ResponseEntity<Iterable<AccountDto>> getAllAccounts(){
+		return ResponseEntity.ok(accountRepository.findAll()
 				.stream()
-				.map(accountMapper::toDto).toList();
+				.map(accountMapper::toDto).toList());
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<AccountDto> getAccount(

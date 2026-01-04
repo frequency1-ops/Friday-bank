@@ -6,14 +6,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frequency.bank.dtos.BranchDto;
+import com.frequency.bank.mappers.BranchMapper;
+import com.frequency.bank.repositories.BranchRepository;
+
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/branches")
+@AllArgsConstructor
 public class BranchController {
+	
+	private final BranchRepository branchRepository;
+	private final BranchMapper branchMapper;
 	
 	@GetMapping()
 	public ResponseEntity<Iterable<BranchDto>> getAllBranches(){
-		return null;
+		return ResponseEntity.ok(branchRepository.findAll()
+				.stream().map(branchMapper::toDto).toList());
 	}
 	
 

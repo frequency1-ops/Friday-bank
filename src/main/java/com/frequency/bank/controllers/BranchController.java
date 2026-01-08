@@ -2,6 +2,7 @@ package com.frequency.bank.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,13 @@ public class BranchController {
 	public ResponseEntity<Iterable<BranchDto>> getAllBranches(){
 		return ResponseEntity.ok(branchRepository.findAll()
 				.stream().map(branchMapper::toDto).toList());
+	}
+	
+	@GetMapping("/{branch-name}")
+	public ResponseEntity<BranchDto>  getBranch(
+				@PathVariable(name = "branch-name") String branchName
+			){
+		return null;
 	}
 	
 

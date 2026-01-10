@@ -26,12 +26,14 @@ public class BranchController {
 				.stream().map(branchMapper::toDto).toList());
 	}
 	
-	@GetMapping("/{branch-name}")
-	public ResponseEntity<BranchDto>  getBranch(
-				@PathVariable(name = "branch-name") String branchName
-			){
-		return null;
-	}
+//	@GetMapping("/{branch-name}")
+//	public ResponseEntity<BranchDto>  getBranch(
+//				@PathVariable(name = "branch-name") String branchName
+//			){
+//		
+//		var branch = branchMapper.toDto(branchRepository.findByBranchName(branchName));
+//		return ResponseEntity.ok(branch);
+//	}
 	
 
 }

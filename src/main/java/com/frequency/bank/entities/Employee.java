@@ -40,7 +40,7 @@ public class Employee {
 	@Enumerated(EnumType.STRING)
 	private RoleType role;
 	
-	@Column(name = "hire_date")
+	@Column(name = "hire_date", updatable = false, insertable = false)
 	private LocalDate hireDate;
 	
 	@Column(name = "salary")

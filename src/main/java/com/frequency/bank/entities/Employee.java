@@ -53,5 +53,7 @@ public class Employee {
 	@OneToOne(mappedBy = "bankManager")
     private Branch managedBranch;
 	
-	
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
 }

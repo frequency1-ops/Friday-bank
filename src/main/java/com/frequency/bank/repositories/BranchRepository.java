@@ -11,4 +11,5 @@ import com.frequency.bank.entities.Branch;
 
 public interface BranchRepository extends JpaRepository<Branch, UUID>{
 	Optional<Branch> findByBranchName(String branchName);
+	Branch findByBranchId(UUID id);
 }

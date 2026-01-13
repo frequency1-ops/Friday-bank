@@ -1,0 +1,2 @@
+ALTER TABLE employee
+MODIFY hire_date DATE DEFAULT (CURRENT_DATE);

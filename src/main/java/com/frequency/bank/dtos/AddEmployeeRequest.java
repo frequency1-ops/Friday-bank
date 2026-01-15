@@ -12,5 +12,5 @@ public class AddEmployeeRequest {
 	private String lastName;
 	private RoleType role;
 	private BigDecimal salary;
-	
+	private String password;
 }

@@ -1,5 +1,7 @@
 package com.frequency.bank.controllers;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,14 +41,13 @@ public class BranchController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-//	@GetMapping("/{branch-name}")
-//	public ResponseEntity<BranchDto>  getBranch(
-//				@PathVariable(name = "branch-name") String branchName
-//			){
-//		
-//		var branch = branchMapper.toDto(branchRepository.findByBranchName(branchName));
-//		return ResponseEntity.ok(branch);
-//	}
+	@GetMapping("/{id}")
+	public ResponseEntity<BranchDto>  getBranch(
+				@PathVariable(name = "id") UUID branchId
+			){
+		var branch = branchRepository.findByBranchId(branchId);
+		return ResponseEntity.ok(branchMapper.toDto(branch));
+	}
 	
 
 }

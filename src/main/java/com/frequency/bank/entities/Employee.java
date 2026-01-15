@@ -46,6 +46,9 @@ public class Employee {
 	@Column(name = "salary")
 	private BigDecimal salary;
 	
+	@Column(name = "password")
+	private String password;
+	
 	@ManyToOne
 	@JoinColumn(name = "branch_id")
 	private Branch branch;

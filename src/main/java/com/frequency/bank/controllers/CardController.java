@@ -17,8 +17,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CardController {
 	
-	private CardRepository cardRepository;
-	private CardMapper cardMapper;
+	private final CardRepository cardRepository;
+	private final CardMapper cardMapper;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<CardDto>> getAllCards(){

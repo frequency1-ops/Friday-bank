@@ -42,7 +42,7 @@ public class EmployeeController {
 	public ResponseEntity<EmployeeDto> getEmployee(
 				@PathVariable(name = "id") UUID employeeId	
 			){
-		var employeeDto = employeeMapper.toDto(employeeRepository.findByEmployeeId(employeeId));
+		var employeeDto = employeeMapper.toDto(employeeRepository.findById(employeeId).orElseThrow());
 		return ResponseEntity.ok(employeeDto);
 	}
 	
@@ -51,7 +51,7 @@ public class EmployeeController {
 			@RequestBody AddEmployeeRequest request,
 			@PathVariable(name = "id") UUID branchId
 			){
-		var branch = branchRepository.findByBranchId(branchId);
+		var branch = branchRepository.findById(branchId).orElseThrow();
 		var employee = employeeMapper.toEntity(request);
 		employee.setBranch(branch);
 		if (employee.getRole() == RoleType.MANAGER && branch.getBankManager() ==null) {
@@ -71,7 +71,7 @@ public class EmployeeController {
 				
 				@PathVariable(name="id") UUID employeeId
 			){
-		var employee = employeeRepository.findByEmployeeId(employeeId);
+		var employee = employeeRepository.findById(employeeId).orElseThrow();
 		employeeRepository.delete(employee);
 		return ResponseEntity.noContent().build();
 	}

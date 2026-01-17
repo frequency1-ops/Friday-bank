@@ -45,7 +45,7 @@ public class BranchController {
 	public ResponseEntity<BranchDto>  getBranch(
 				@PathVariable(name = "id") UUID branchId
 			){
-		var branch = branchRepository.findByBranchId(branchId);
+		var branch = branchRepository.findById(branchId).orElseThrow();
 		return ResponseEntity.ok(branchMapper.toDto(branch));
 	}
 	

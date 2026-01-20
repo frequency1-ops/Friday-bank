@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.frequency.bank.dtos.LoanApplicationRequest;
 import com.frequency.bank.dtos.LoanDto;
 import com.frequency.bank.dtos.LoanPaymentRequest;
 import com.frequency.bank.entities.Loan;
@@ -49,6 +50,13 @@ public class LoanController {
 		loan.setAmount(balance);
 		loanRepository.save(loan);
 		return ResponseEntity.ok(loanMapper.toDto(loan));
+	}
+	@PostMapping("/{id}/apply-loan")
+	public ResponseEntity<LoanDto> applyLoan(
+			@PathVariable(name = "id") UUID customerId,
+			@RequestBody LoanApplicationRequest request
+			){
+		return null;
 	}
 
 }

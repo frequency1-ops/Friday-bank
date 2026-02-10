@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,10 +36,10 @@ public class Loan {
 	@Column(name = "interest_rate")
 	private BigDecimal interestRate;
 	
-	@Column(name = "start_date", insertable = false, updatable = false)
+	@Column(name = "start_date")
 	private LocalDate startDate;
 	
-	@Column(name = "end_date", insertable = false, updatable = false)
+	@Column(name = "end_date")
 	private LocalDate endDate;
 	
 	@Column(name = "status")
@@ -48,5 +49,15 @@ public class Loan {
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
+	
+    @PrePersist
+    void onCreate() {
+        if (this.startDate == null) {
+            this.startDate = LocalDate.now();
+        }
+        if (this.endDate == null) {
+            this.endDate = this.startDate.plusMonths(3);
+        }
+    }
 
 }

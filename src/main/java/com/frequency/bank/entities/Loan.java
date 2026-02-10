@@ -35,10 +35,10 @@ public class Loan {
 	@Column(name = "interest_rate")
 	private BigDecimal interestRate;
 	
-	@Column(name = "start_date")
+	@Column(name = "start_date", insertable = false, updatable = false)
 	private LocalDate startDate;
 	
-	@Column(name = "end_date")
+	@Column(name = "end_date", insertable = false, updatable = false)
 	private LocalDate endDate;
 	
 	@Column(name = "status")

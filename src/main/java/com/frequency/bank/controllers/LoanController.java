@@ -3,6 +3,8 @@ package com.frequency.bank.controllers;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import com.frequency.bank.dtos.LoanDto;
 import com.frequency.bank.dtos.LoanPaymentRequest;
 import com.frequency.bank.entities.Loan;
 import com.frequency.bank.mappers.LoanMapper;
+import com.frequency.bank.repositories.CustomerRepository;
 import com.frequency.bank.repositories.LoanRepository;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +30,7 @@ public class LoanController {
 	
 	private final LoanRepository loanRepository;
 	private final  LoanMapper loanMapper;
+	private final CustomerRepository customerRepository;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<LoanDto>> getAllLoans(){
@@ -55,8 +59,14 @@ public class LoanController {
 	public ResponseEntity<LoanDto> applyLoan(
 			@PathVariable(name = "id") UUID customerId,
 			@RequestBody LoanApplicationRequest request
+			
 			){
-		return null;
+		var customer = customerRepository.findById(customerId).orElseThrow();
+		var loan = loanMapper.toEntity(request);
+		loan.setCustomer(customer);
+		loanRepository.save(loan);
+		
+		return ResponseEntity.ok(loanMapper.toDto(loan));
 	}
 
 }

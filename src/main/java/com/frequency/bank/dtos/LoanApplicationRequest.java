@@ -10,10 +10,8 @@ import lombok.Data;
 @Data
 public class LoanApplicationRequest {
 	
-	private UUID loanId;
 	private BigDecimal amount;
 	private BigDecimal interestRate;
-	private LocalDate startDate;
 	
 
 }

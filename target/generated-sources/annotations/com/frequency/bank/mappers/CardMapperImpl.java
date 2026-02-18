@@ -1,15 +1,15 @@
 package com.frequency.bank.mappers;
 
 import com.frequency.bank.dtos.CardDto;
-import com.frequency.bank.dtos.CardRequest;
+import com.frequency.bank.dtos.CreateCardRequest;
 import com.frequency.bank.entities.Card;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-10T14:34:07+0300",
-    comments = "version: 1.6.2, compiler: Eclipse JDT (IDE) 3.43.50.v20250916-1548, environment: Java 23.0.1 (Oracle Corporation)"
+    date = "2026-02-18T21:36:23+0300",
+    comments = "version: 1.6.2, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 23.0.1 (Oracle Corporation)"
 )
 @Component
 public class CardMapperImpl implements CardMapper {
@@ -31,12 +31,14 @@ public class CardMapperImpl implements CardMapper {
     }
 
     @Override
-    public Card toEntity(CardRequest request) {
+    public Card toEntity(CreateCardRequest request) {
         if ( request == null ) {
             return null;
         }
 
         Card card = new Card();
+
+        card.setCardType( request.getCardType() );
 
         return card;
     }

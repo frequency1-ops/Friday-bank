@@ -18,6 +18,7 @@ import com.frequency.bank.dtos.CreateAccountRequest;
 import com.frequency.bank.entities.AccountType;
 import com.frequency.bank.mappers.AccountMapper;
 import com.frequency.bank.repositories.AccountRepository;
+import com.frequency.bank.repositories.BranchRepository;
 import com.frequency.bank.repositories.CustomerRepository;
 
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class AccountController {
 	private final AccountMapper accountMapper;
 	private final AccountRepository accountRepository;
 	private final CustomerRepository customerRepository;
+	private final BranchRepository branchRepository;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<AccountDto>> getAllAccounts(){
@@ -49,9 +51,11 @@ public class AccountController {
 			@PathVariable(name = "id") UUID customerId,
 			@RequestBody CreateAccountRequest request
 			){
+		var branch = branchRepository.findByBranchName(request.getBranchName()).orElseThrow();
 		var customer = customerRepository.findById(customerId).orElseThrow();
 		var account = accountMapper.toEntity(request);
-		account.setAccountNumber(account.getAccountNumber());
+		account.setBranch(branch);
+		account.setAccountNumber(account.generateAccountNumber());
 		account.setCustomer(customer);
 		accountRepository.save(account);
 		customer.getAccounts().add(account);

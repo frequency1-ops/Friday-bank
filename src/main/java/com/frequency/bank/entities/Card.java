@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class Card {
 	private LocalDate expiryDate;
 	
 	@Column(name = "cvv")
-	private String cvv;
+	private char[] cvv;
 	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
@@ -48,5 +49,24 @@ public class Card {
 	@ManyToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
+	
+	public char[] generateCvv() {
+		
+		long random = (long) (Math.random() * 1_000L); 
+		return String.format("%03d", random).toCharArray();
+
+	}
+	public String generateCardNumber() {
+		
+		long random = (long) (Math.random() * 10_000_000_000_000_000L); 
+		return String.format("%016d", random);
+
+	}
+	 @PrePersist
+	    void onCreate() {
+	        if (this.expiryDate == null) {
+	            this.expiryDate = LocalDate.now().plusMonths(36);
+	        }
+	    }
 
 }

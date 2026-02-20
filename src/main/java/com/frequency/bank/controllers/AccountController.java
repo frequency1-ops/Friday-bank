@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.frequency.bank.dtos.AccountDto;
 import com.frequency.bank.dtos.ChangeAccountTypeRequest;
 import com.frequency.bank.dtos.CreateAccountRequest;
-import com.frequency.bank.entities.AccountType;
-import com.frequency.bank.mappers.AccountMapper;
-import com.frequency.bank.repositories.AccountRepository;
-import com.frequency.bank.repositories.BranchRepository;
-import com.frequency.bank.repositories.CustomerRepository;
+import com.frequency.bank.service.AccountService;
 
 import lombok.AllArgsConstructor;
 
@@ -27,42 +23,28 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/accounts")
 public class AccountController {
-	
-	private final AccountMapper accountMapper;
-	private final AccountRepository accountRepository;
-	private final CustomerRepository customerRepository;
-	private final BranchRepository branchRepository;
+
+	private final AccountService accountService;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<AccountDto>> getAllAccounts(){
-		return ResponseEntity.ok(accountRepository.findAll()
-				.stream()
-				.map(accountMapper::toDto).toList());
+		return ResponseEntity.ok(accountService.getAllAccounts());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<AccountDto> getAccount(
 			@PathVariable(name = "id") UUID accountId
 			){
-		var account = accountRepository.findById(accountId).orElseThrow();
-		return ResponseEntity.ok(accountMapper.toDto(account));
+		return ResponseEntity.ok(accountService.getAccount(accountId));
 	}
 	@PostMapping("/{id}/create-account")
 	public ResponseEntity<Void> createAccount(
 			@PathVariable(name = "id") UUID customerId,
 			@RequestBody CreateAccountRequest request
 			){
-		var branch = branchRepository.findByBranchName(request.getBranchName()).orElseThrow();
-		var customer = customerRepository.findById(customerId).orElseThrow();
-		var account = accountMapper.toEntity(request);
-		account.setBranch(branch);
-		account.setAccountNumber(account.generateAccountNumber());
-		account.setCustomer(customer);
-		accountRepository.save(account);
-		customer.getAccounts().add(account);
-		customerRepository.save(customer);
-		
-		
+			
+			accountService.createAccount(customerId, request);
+			
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
 	}
@@ -70,8 +52,7 @@ public class AccountController {
 	public ResponseEntity<Void> deleteAccount(
 			@PathVariable(name = "id") UUID  accountId
 			){
-		var account = accountRepository.findById(accountId).orElseThrow();
-		accountRepository.delete(account);
+		
 		return ResponseEntity.noContent().build();
 	}
 	@PostMapping("/{id}/change-accountType")
@@ -79,11 +60,7 @@ public class AccountController {
 			@PathVariable(name = "id") UUID accountId,
 			@RequestBody ChangeAccountTypeRequest request
 			){
-		var account = accountRepository.findById(accountId).orElseThrow();
-		var type = request.getAccountType();
-		AccountType accountType = AccountType.valueOf(type.toUpperCase());
-		account.setAccountType(accountType);
-		accountRepository.save(account);	
+		accountService.changeAccountType(accountId, request);
 		return ResponseEntity.noContent().build();
 		
 	}

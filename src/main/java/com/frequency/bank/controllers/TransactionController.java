@@ -43,6 +43,16 @@ public class TransactionController {
 		var transaction = transactionRepository.findById(transactionId).orElseThrow();
 		return ResponseEntity.ok(transactionMapper.toDto(transaction));
 	}
+	@GetMapping("/{id}/account-history")
+	public ResponseEntity<Iterable<TransactionDto>> getAccountTransactionHistory(
+				@PathVariable(name = "id") UUID accountId
+			){
+		
+		var account = accountRepository.findById(accountId).orElseThrow();
+		var history = account.getTransactions();
+		return ResponseEntity.ok(history.stream().map(transactionMapper::toDto).toList());
+	}
+	
 	@PostMapping("/{id}")
 	public ResponseEntity<TransactionDto> createTransaction(
 			@PathVariable(name = "id") UUID accountId,

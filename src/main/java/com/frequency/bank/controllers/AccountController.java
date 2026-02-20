@@ -39,6 +39,7 @@ public class AccountController {
 				.stream()
 				.map(accountMapper::toDto).toList());
 	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<AccountDto> getAccount(
 			@PathVariable(name = "id") UUID accountId

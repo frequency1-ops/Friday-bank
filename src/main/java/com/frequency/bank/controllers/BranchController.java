@@ -17,6 +17,7 @@ import com.frequency.bank.dtos.BranchDto;
 import com.frequency.bank.dtos.CreateBranchRequest;
 import com.frequency.bank.mappers.BranchMapper;
 import com.frequency.bank.repositories.BranchRepository;
+import com.frequency.bank.service.BranchService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,21 +26,18 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BranchController {
 	
-	private final BranchRepository branchRepository;
-	private final BranchMapper branchMapper;
+	private final BranchService branchService;
 	
 	@GetMapping()
 	public ResponseEntity<Iterable<BranchDto>> getAllBranches(){
-		return ResponseEntity.ok(branchRepository.findAll()
-				.stream().map(branchMapper::toDto).toList());
+		return ResponseEntity.ok(branchService.getAllBranches());
 	}
 	
 	@PostMapping("/create-branch")
 	public ResponseEntity<Void> createBranch(
 			@RequestBody CreateBranchRequest request
 			){
-		var branch = branchMapper.toEntity(request);
-		branchRepository.save(branch);
+		branchService.createBranch(request);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
@@ -47,16 +45,15 @@ public class BranchController {
 	public ResponseEntity<BranchDto>  getBranch(
 				@PathVariable(name = "id") UUID branchId
 			){
-		var branch = branchRepository.findById(branchId).orElseThrow();
-		return ResponseEntity.ok(branchMapper.toDto(branch));
+		var branchDto = branchService.getBranch(branchId);
+		return ResponseEntity.ok(branchDto);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteBranch(
 				@PathVariable(name = "id") UUID branchId
 			){
 		
-		var branch = branchRepository.findById(branchId).orElseThrow();
-		branchRepository.delete(branch);
+		branchService.deleteBranch(branchId);
 		return ResponseEntity.noContent().build();
 	}
 	

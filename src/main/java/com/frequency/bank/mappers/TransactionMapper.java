@@ -10,6 +10,6 @@ import com.frequency.bank.entities.Transaction;
 public interface TransactionMapper {
 	
 	TransactionDto toDto(Transaction transaction);
-	TransactionRequest toEntity(TransactionRequest request);
+	Transaction toEntity(TransactionRequest request);
 
 }

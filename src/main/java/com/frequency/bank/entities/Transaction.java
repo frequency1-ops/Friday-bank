@@ -13,8 +13,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "Transaction")
 public class Transaction {
@@ -40,5 +45,12 @@ public class Transaction {
 	@ManyToOne
 	@JoinColumn(name = "account_id")
 	private Account account;
-
+	
+	@PrePersist
+	void onCreate() {
+	if(this.timeStamp == null) {
+		this.timeStamp = LocalDateTime.now();
+		}
+	}
+	
 }

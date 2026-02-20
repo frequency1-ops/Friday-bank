@@ -3,12 +3,13 @@ package com.frequency.bank.mappers;
 import com.frequency.bank.dtos.TransactionDto;
 import com.frequency.bank.dtos.TransactionRequest;
 import com.frequency.bank.entities.Transaction;
+import java.time.LocalDate;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-18T21:36:23+0300",
+    date = "2026-02-20T14:49:28+0300",
     comments = "version: 1.6.2, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 23.0.1 (Oracle Corporation)"
 )
 @Component
@@ -22,17 +23,28 @@ public class TransactionMapperImpl implements TransactionMapper {
 
         TransactionDto transactionDto = new TransactionDto();
 
+        transactionDto.setAmount( transaction.getAmount() );
+        transactionDto.setDescription( transaction.getDescription() );
+        if ( transaction.getTimeStamp() != null ) {
+            transactionDto.setTimeStamp( transaction.getTimeStamp().toLocalDate() );
+        }
+        transactionDto.setTransactionId( transaction.getTransactionId() );
+
         return transactionDto;
     }
 
     @Override
-    public TransactionRequest toEntity(TransactionRequest request) {
+    public Transaction toEntity(TransactionRequest request) {
         if ( request == null ) {
             return null;
         }
 
-        TransactionRequest transactionRequest = new TransactionRequest();
+        Transaction transaction = new Transaction();
 
-        return transactionRequest;
+        transaction.setAmount( request.getAmount() );
+        transaction.setDescription( request.getDescription() );
+        transaction.setType( request.getType() );
+
+        return transaction;
     }
 }

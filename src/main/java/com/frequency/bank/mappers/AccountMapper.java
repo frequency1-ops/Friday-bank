@@ -13,4 +13,5 @@ public interface AccountMapper {
 	@Mapping(target = "branchId", expression = "java(account.getBranch().getBranchId())")
 	AccountDto toDto(Account account);
 	Account toEntity(CreateAccountRequest request);
+	
 }

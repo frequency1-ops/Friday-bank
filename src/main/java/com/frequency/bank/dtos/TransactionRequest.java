@@ -23,5 +23,7 @@ public class TransactionRequest {
 	
 	@NotBlank
 	private String description;
+	
+	private String recipientAccountNumber;
 
 }

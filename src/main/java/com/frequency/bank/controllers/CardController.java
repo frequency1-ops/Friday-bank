@@ -17,6 +17,7 @@ import com.frequency.bank.dtos.CreateCardRequest;
 import com.frequency.bank.mappers.CardMapper;
 import com.frequency.bank.repositories.AccountRepository;
 import com.frequency.bank.repositories.CardRepository;
+import com.frequency.bank.service.CardService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,43 +26,33 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CardController {
 	
-	private final CardRepository cardRepository;
-	private final CardMapper cardMapper;
-	private final AccountRepository accountRepository;
+	private final CardService cardService;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<CardDto>> getAllCards(){
-		return ResponseEntity.ok(cardRepository.findAll()
-				.stream().map(cardMapper::toDto).toList());
+		return ResponseEntity.ok(cardService.getAllCards());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<CardDto> getCard(
 			@PathVariable(name = "id") UUID cardId
 			){
-		var card = cardRepository.findById(cardId).orElseThrow();
-		return ResponseEntity.ok(cardMapper.toDto(card));
+			var cardDto = cardService.getCard(cardId);
+		return ResponseEntity.ok(cardDto);
 	}
 	@PostMapping("/{id}/create-card")
 	public ResponseEntity<Void> createCard(
 			@PathVariable(name= "id") UUID accountId,
 			@RequestBody CreateCardRequest request
 			){
-		var account = accountRepository.findById(accountId).orElseThrow();
-		var card = cardMapper.toEntity(request);
-		card.setAccount(account);
-		card.setCustomer(account.getCustomer());
-		card.setCardNumber(card.generateCardNumber());
-		card.setCvv(card.generateCvv());
-		cardRepository.save(card);
+		cardService.createCard(accountId, request);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteCard(
 			@PathVariable(name = "id") UUID cardId
 			){
-		var card = cardRepository.findById(cardId).orElseThrow();
-		cardRepository.delete(card);
+		cardService.deleteCard(cardId);
 		return ResponseEntity.noContent().build();
 	}
 	

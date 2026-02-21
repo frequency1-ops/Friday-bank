@@ -38,8 +38,8 @@ public class CustomerController {
 		return ResponseEntity.ok(customerService.getAllCustomers());  
 	}
 	
-	@GetMapping("/{id}")
-	private ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "id") UUID customerId){
+	@GetMapping("/{customer-id}")
+	private ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "customer-id") UUID customerId){
 		return ResponseEntity.ok(customerService.getCustomerById(customerId));
 	}
 	@PostMapping()
@@ -53,27 +53,27 @@ public class CustomerController {
 		return ResponseEntity.created(uri).body(customerDto);
 		
 	}
-	@PutMapping("/{id}")
+	@PutMapping("/{customer-id}")
 	public ResponseEntity<CustomerDto> updateCustomer(
-			@PathVariable(name = "id") UUID customerId,
+			@PathVariable(name = "customer-id") UUID customerId,
 			@RequestBody UpdateCustomerRequest request
 			){
 		
 		var customerDto = customerService.updateCustomer(request, customerId);
 		return ResponseEntity.ok(customerDto);
 	}
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{customer-id}")
 	public ResponseEntity<Void> deleteCustomer(
-			@PathVariable(name = "id") UUID customerId
+			@PathVariable(name = "customer-id") UUID customerId
 			){
 		
 		customerService.deleteCustomer(customerId);
 		
 		return ResponseEntity.noContent().build();
 	}
-	@PostMapping("/{id}/change-password")
+	@PostMapping("/{customer-id}/change-password")
 	public ResponseEntity<Void> changePassword(
-			@PathVariable(name = "id") UUID customerId,
+			@PathVariable(name = "customer-id") UUID customerId,
 			@RequestBody ChangePasswordRequest request
 			){
 		customerService.changePassword(customerId, request);

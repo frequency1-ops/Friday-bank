@@ -17,6 +17,7 @@ import com.frequency.bank.entities.TransactionType;
 import com.frequency.bank.mappers.TransactionMapper;
 import com.frequency.bank.repositories.AccountRepository;
 import com.frequency.bank.repositories.TransactionRepository;
+import com.frequency.bank.service.TransactionService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,58 +26,35 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class TransactionController {
 	
-	private final TransactionRepository transactionRepository;
-	private final TransactionMapper transactionMapper;
-	private final AccountRepository accountRepository;
+	private TransactionService transactionService;
 	
 	@GetMapping
 	public ResponseEntity<Iterable<TransactionDto>> getAllTransactions(){
 		
-		return ResponseEntity.ok(transactionRepository.findAll()
-				.stream().
-				map(transactionMapper::toDto).toList());
+		return ResponseEntity.ok(transactionService.getAllTransactions());
 	}
-	@GetMapping("/{id}")
+	@GetMapping("/{transaction-id}")
 	public ResponseEntity<TransactionDto> getTransaction(
-			@PathVariable(name = "id") UUID transactionId
+			@PathVariable(name = "transaction-id") UUID transactionId
 			){
-		var transaction = transactionRepository.findById(transactionId).orElseThrow();
-		return ResponseEntity.ok(transactionMapper.toDto(transaction));
+		var transactionDto = transactionService.getTransaction(transactionId);
+		return ResponseEntity.ok(transactionDto);
 	}
-	@GetMapping("/{id}/account-history")
+	@GetMapping("/{account-id}/account-history")
 	public ResponseEntity<Iterable<TransactionDto>> getAccountTransactionHistory(
-				@PathVariable(name = "id") UUID accountId
+				@PathVariable(name = "account-id") UUID accountId
 			){
 		
-		var account = accountRepository.findById(accountId).orElseThrow();
-		var history = account.getTransactions();
-		return ResponseEntity.ok(history.stream().map(transactionMapper::toDto).toList());
+		var history = transactionService.getAccountTransactionHistory(accountId);
+		return ResponseEntity.ok(history);
 	}
 	
-	@PostMapping("/{id}")
+	@PostMapping("/{account-id}")
 	public ResponseEntity<TransactionDto> createTransaction(
-			@PathVariable(name = "id") UUID accountId,
+			@PathVariable(name = "account-id") UUID accountId,
 			@RequestBody TransactionRequest request
 			){
-		var account = accountRepository.findById(accountId).orElseThrow();
-		var transaction = transactionMapper.toEntity(request);
-		switch(transaction.getType()){
-			case DEPOSIT:
-				account.setBalance(account.getBalance().add(transaction.getAmount()));
-				break;
-			case WITHDRAWAL:
-				account.setBalance(account.getBalance().subtract(transaction.getAmount()));
-				break;
-			case TRANSFER_OUT:
-				var recipientAccount = accountRepository.findByAccountNumber(request.getRecipientAccountNumber()).orElseThrow();
-				var recipientTransaction = transactionMapper.toEntity(request);
-				recipientTransaction.setAccount(recipientAccount);
-				recipientTransaction.setType(TransactionType.TRANSFER_IN);
-				recipientAccount.setBalance(recipientAccount.getBalance().add(recipientTransaction.getAmount()));
-				break;
-			default:
-				break;
-		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(transactionMapper.toDto(transaction));
+		var transactionDto = transactionService.createTrnsaction(accountId, request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(transactionDto);
 	}
 }

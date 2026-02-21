@@ -64,6 +64,9 @@ public class Account {
 	@OneToMany(mappedBy = "account")
 	private List<Transaction> transactions = new ArrayList<Transaction>();
 	
+	@OneToMany(mappedBy = "account")
+	private List<Loan> loans = new ArrayList<Loan>();
+	
 	@ManyToOne
 	@JoinColumn(name = "branch_id")
 	private Branch branch;

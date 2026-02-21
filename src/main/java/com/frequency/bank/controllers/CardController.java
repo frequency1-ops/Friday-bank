@@ -33,24 +33,24 @@ public class CardController {
 		return ResponseEntity.ok(cardService.getAllCards());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{card-id}")
 	public ResponseEntity<CardDto> getCard(
-			@PathVariable(name = "id") UUID cardId
+			@PathVariable(name = "card-id") UUID cardId
 			){
 			var cardDto = cardService.getCard(cardId);
 		return ResponseEntity.ok(cardDto);
 	}
-	@PostMapping("/{id}/create-card")
+	@PostMapping("/{account-id}/create-card")
 	public ResponseEntity<Void> createCard(
-			@PathVariable(name= "id") UUID accountId,
+			@PathVariable(name= "account-id") UUID accountId,
 			@RequestBody CreateCardRequest request
 			){
 		cardService.createCard(accountId, request);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{card-id}")
 	public ResponseEntity<Void> deleteCard(
-			@PathVariable(name = "id") UUID cardId
+			@PathVariable(name = "card-id") UUID cardId
 			){
 		cardService.deleteCard(cardId);
 		return ResponseEntity.noContent().build();

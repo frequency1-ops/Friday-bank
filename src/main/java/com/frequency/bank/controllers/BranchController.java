@@ -41,16 +41,16 @@ public class BranchController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{branch-id}")
 	public ResponseEntity<BranchDto>  getBranch(
-				@PathVariable(name = "id") UUID branchId
+				@PathVariable(name = "branch-id") UUID branchId
 			){
 		var branchDto = branchService.getBranch(branchId);
 		return ResponseEntity.ok(branchDto);
 	}
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{branch-id}")
 	public ResponseEntity<Void> deleteBranch(
-				@PathVariable(name = "id") UUID branchId
+				@PathVariable(name = "branch-id") UUID branchId
 			){
 		
 		branchService.deleteBranch(branchId);

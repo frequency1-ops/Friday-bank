@@ -1,6 +1,5 @@
 package com.frequency.bank.controllers;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -14,61 +13,45 @@ import org.springframework.web.bind.annotation.RestController;
 import com.frequency.bank.dtos.LoanApplicationRequest;
 import com.frequency.bank.dtos.LoanDto;
 import com.frequency.bank.dtos.LoanPaymentRequest;
-import com.frequency.bank.entities.LoanStatus;
-import com.frequency.bank.mappers.LoanMapper;
-import com.frequency.bank.repositories.CustomerRepository;
-import com.frequency.bank.repositories.LoanRepository;
+import com.frequency.bank.service.LoanService;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/loans")
 @AllArgsConstructor
 public class LoanController {
-	
-	private final LoanRepository loanRepository;
-	private final  LoanMapper loanMapper;
-	private final CustomerRepository customerRepository;
+	private final LoanService loanService;
 	
 	
 	@GetMapping
 	public ResponseEntity<Iterable<LoanDto>> getAllLoans(){
-		return ResponseEntity.ok(loanRepository.findAll().stream()
-				.map(loanMapper::toDto).toList());
+		return ResponseEntity.ok(loanService.getAllLoans());
 	}
-	@GetMapping("/{id}")
+	@GetMapping("/{loan-id}")
 	public ResponseEntity<LoanDto> getLoan(
-				@PathVariable(name="id") UUID loanId
+				@PathVariable(name="loan-id") UUID loanId
 			){
-		var loan = loanRepository.findById(loanId).orElseThrow();
-		return ResponseEntity.ok(loanMapper.toDto(loan));
+		var loanDto = loanService.getLoan(loanId);
+		return ResponseEntity.ok(loanDto);
 	}
 	
-	@PostMapping("/{id}/pay-loan")
+	@PostMapping("/{loan-id}/pay-loan")
 	public ResponseEntity<LoanDto> payLoan(
-			@PathVariable(name = "id") UUID loanId,
+			@PathVariable(name = "loan-id") UUID loanId,
 			@RequestBody LoanPaymentRequest request){
-		var loan = loanRepository.findById(loanId).orElseThrow();
-		BigDecimal balance = loan.getAmount().subtract(request.getAmount());
-		loan.setAmount(balance);
-		loanRepository.save(loan);
-		return ResponseEntity.ok(loanMapper.toDto(loan));
+		var loanDto = loanService.payLoan(loanId, request);
+		return ResponseEntity.ok(loanDto);
 	}
-	@PostMapping("/{id}/apply-loan")
+	@PostMapping("/{account-id}/apply-loan")
 	public ResponseEntity<LoanDto> applyLoan(
-			@PathVariable(name = "id") UUID customerId,
+			@PathVariable(name = "account-id") UUID accountId,
 			@RequestBody LoanApplicationRequest request
 			
 			){
-		var customer = customerRepository.findById(customerId).orElseThrow();
-		var loan = loanMapper.toEntity(request);
-		loan.setCustomer(customer);
-		loan.setStatus(LoanStatus.ACTIVE);
-		loanRepository.save(loan);
+		var loanDto = loanService.applyLoan(accountId, request);
 		
-		return ResponseEntity.ok(loanMapper.toDto(loan));
+		return ResponseEntity.ok(loanDto);
 	}
 
 }

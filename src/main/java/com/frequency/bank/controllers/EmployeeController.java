@@ -18,6 +18,7 @@ import com.frequency.bank.entities.RoleType;
 import com.frequency.bank.mappers.EmployeeMapper;
 import com.frequency.bank.repositories.BranchRepository;
 import com.frequency.bank.repositories.EmployeeRepository;
+import com.frequency.bank.service.EmployeeService;
 
 import lombok.AllArgsConstructor;
 
@@ -26,53 +27,39 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/employees")
 public class EmployeeController {
 	
-	private final EmployeeRepository employeeRepository;
-	private final EmployeeMapper employeeMapper;
-	private final BranchRepository branchRepository;
+	private final EmployeeService employeeService;
 	
 	
 	@GetMapping
 	public ResponseEntity<Iterable<EmployeeDto>> getAllEmployess(){
-		return ResponseEntity.ok(employeeRepository.findAll().
-				stream()
-				.map(employeeMapper::toDto).toList());
+		return ResponseEntity.ok(employeeService.getAllEmployees());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{employee-id}")
 	public ResponseEntity<EmployeeDto> getEmployee(
-				@PathVariable(name = "id") UUID employeeId	
+				@PathVariable(name = "employee-id") UUID employeeId	
 			){
-		var employeeDto = employeeMapper.toDto(employeeRepository.findById(employeeId).orElseThrow());
+		
+		var employeeDto = employeeService.getEmployee(employeeId);
+		
 		return ResponseEntity.ok(employeeDto);
 	}
 	
-	@PostMapping("/{id}/add-employee")
+	@PostMapping("/{branch-id}/add-employee")
 	public ResponseEntity<Void> addEmployee(
 			@RequestBody AddEmployeeRequest request,
-			@PathVariable(name = "id") UUID branchId
+			@PathVariable(name = "branch-id") UUID branchId
 			){
-		var branch = branchRepository.findById(branchId).orElseThrow();
-		var employee = employeeMapper.toEntity(request);
-		employee.setBranch(branch);
-		if (employee.getRole() == RoleType.MANAGER && branch.getBankManager() ==null) {
-			branch.setBankManager(employee);
-		}else if(employee.getRole() == RoleType.MANAGER && branch.getBankManager() !=null) {
-			branch.getBankManager().setRole(RoleType.EMPLOYEE);
-			branch.setBankManager(employee);
-		}
-		
-		employeeRepository.save(employee);
-		branchRepository.save(branch);
+			employeeService.addEmployee(request, branchId);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{employee-id}")
 	public ResponseEntity<Void> deleteEmployee(
 				
-				@PathVariable(name="id") UUID employeeId
+				@PathVariable(name="employee-id") UUID employeeId
 			){
-		var employee = employeeRepository.findById(employeeId).orElseThrow();
-		employeeRepository.delete(employee);
+			employeeService.deleteEmployee(employeeId);
 		return ResponseEntity.noContent().build();
 	}
 

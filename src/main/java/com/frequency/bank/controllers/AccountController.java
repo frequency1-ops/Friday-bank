@@ -31,15 +31,15 @@ public class AccountController {
 		return ResponseEntity.ok(accountService.getAllAccounts());
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{account-id}")
 	public ResponseEntity<AccountDto> getAccount(
-			@PathVariable(name = "id") UUID accountId
+			@PathVariable(name = "account-id") UUID accountId
 			){
 		return ResponseEntity.ok(accountService.getAccount(accountId));
 	}
-	@PostMapping("/{id}/create-account")
+	@PostMapping("/{customer-id}/create-account")
 	public ResponseEntity<Void> createAccount(
-			@PathVariable(name = "id") UUID customerId,
+			@PathVariable(name = "customer-id") UUID customerId,
 			@RequestBody CreateAccountRequest request
 			){
 			
@@ -48,16 +48,16 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
 	}
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{account-id}")
 	public ResponseEntity<Void> deleteAccount(
-			@PathVariable(name = "id") UUID  accountId
+			@PathVariable(name = "account-id") UUID  accountId
 			){
 		
 		return ResponseEntity.noContent().build();
 	}
-	@PostMapping("/{id}/change-accountType")
+	@PostMapping("/{account-id}/change-accountType")
 	public ResponseEntity<Void> changeAccountType(
-			@PathVariable(name = "id") UUID accountId,
+			@PathVariable(name = "account-id") UUID accountId,
 			@RequestBody ChangeAccountTypeRequest request
 			){
 		accountService.changeAccountType(accountId, request);

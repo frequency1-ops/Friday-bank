@@ -47,8 +47,8 @@ public class Loan {
 	private LoanStatus status;
 	
 	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
+	@JoinColumn(name = "account_id")
+	private Account account;
 	
     @PrePersist
     void onCreate() {

@@ -2,6 +2,7 @@ package com.frequency.bank.service;
 
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.frequency.bank.dtos.AddEmployeeRequest;
@@ -20,6 +21,7 @@ public class EmployeeService {
 	private final EmployeeRepository employeeRepository;
 	private final EmployeeMapper employeeMapper;
 	private final BranchRepository branchRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	public Iterable<EmployeeDto> getAllEmployees(){
 		return employeeRepository.findAll().
@@ -43,6 +45,7 @@ public class EmployeeService {
 			branch.setBankManager(employee);
 		}
 		
+		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		employeeRepository.save(employee);
 		branchRepository.save(branch);
 	}

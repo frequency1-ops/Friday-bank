@@ -2,6 +2,7 @@ package com.frequency.bank.service;
 
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.frequency.bank.dtos.ChangePasswordRequest;
@@ -28,6 +29,7 @@ public class CustomerService {
 	private final CustomerRepository customerRepository;
 	private final BranchRepository branchRepository;
 	private final AccountRepository accountRepository;
+	private final PasswordEncoder passwordEncoder;
 	
 	public Iterable<CustomerDto> getAllCustomers(){
 		return customerRepository.findAll().stream()
@@ -41,6 +43,7 @@ public class CustomerService {
 		}
 	public CustomerDto registerCustomer(RegisterCustomerRequest request) {
 		var customer = customerMapper.toEntity(request);
+		customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 		customerRepository.save(customer);
 		
 		var branch = branchRepository.findByBranchName(request.getBranchName()).orElseThrow();

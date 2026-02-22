@@ -42,7 +42,7 @@ public class CustomerController {
 	private ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "customer-id") UUID customerId){
 		return ResponseEntity.ok(customerService.getCustomerById(customerId));
 	}
-	@PostMapping()
+	@PostMapping("/register-customer")
 	public ResponseEntity<CustomerDto> registerCustomer(
 			@RequestBody @Valid RegisterCustomerRequest request,
 			UriComponentsBuilder uriBuilder

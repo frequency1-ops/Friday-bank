@@ -2,6 +2,7 @@ package com.frequency.bank.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +22,7 @@ public class AuthController {
 	
 	public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request){
 		
-		authenticationManager.authenticate(null);
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 		
 		return ResponseEntity.ok().build();
 		

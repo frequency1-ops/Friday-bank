@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,5 +35,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(WrongPasswordException.class)
 	public ResponseEntity<ErrorDto> handleWrongPassword() {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorDto("Wrong password"));
+	}
+	
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Void> handleBadCredentials(){
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 }

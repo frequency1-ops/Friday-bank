@@ -1,5 +1,6 @@
 package com.frequency.bank.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.frequency.bank.dtos.ChangePasswordRequest;
 import com.frequency.bank.dtos.CustomerDto;
+import com.frequency.bank.dtos.EmployeeDto;
 import com.frequency.bank.dtos.RegisterCustomerRequest;
 import com.frequency.bank.dtos.UpdateCustomerRequest;
 import com.frequency.bank.entities.Account;
 import com.frequency.bank.entities.AccountType;
 import com.frequency.bank.entities.Customer;
+import com.frequency.bank.entities.Employee;
 import com.frequency.bank.exceptions.CustomerNotFoundException;
 import com.frequency.bank.exceptions.WrongPasswordException;
 import com.frequency.bank.mappers.CustomerMapper;
@@ -77,14 +80,5 @@ public class CustomerService {
 		customer.setPassword(request.getNewPassword());
 		customerRepository.save(customer);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
 
 }

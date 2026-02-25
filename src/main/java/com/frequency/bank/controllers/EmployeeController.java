@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.frequency.bank.dtos.AddEmployeeRequest;
+import com.frequency.bank.dtos.CustomerDto;
 import com.frequency.bank.dtos.EmployeeDto;
 import com.frequency.bank.entities.RoleType;
 import com.frequency.bank.mappers.EmployeeMapper;

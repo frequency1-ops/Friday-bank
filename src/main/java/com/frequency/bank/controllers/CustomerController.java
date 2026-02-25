@@ -38,6 +38,7 @@ public class CustomerController {
 		return ResponseEntity.ok(customerService.getAllCustomers());  
 	}
 	
+	
 	@GetMapping("/{customer-id}")
 	private ResponseEntity<CustomerDto> getCustomerById(@PathVariable(name = "customer-id") UUID customerId){
 		return ResponseEntity.ok(customerService.getCustomerById(customerId));

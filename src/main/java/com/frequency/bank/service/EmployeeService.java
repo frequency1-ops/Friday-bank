@@ -1,5 +1,6 @@
 package com.frequency.bank.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.frequency.bank.dtos.AddEmployeeRequest;
 import com.frequency.bank.dtos.EmployeeDto;
+import com.frequency.bank.entities.Employee;
 import com.frequency.bank.entities.RoleType;
 import com.frequency.bank.mappers.EmployeeMapper;
 import com.frequency.bank.repositories.BranchRepository;
@@ -54,5 +56,6 @@ public class EmployeeService {
 		var employee = employeeRepository.findById(employeeId).orElseThrow();
 		employeeRepository.delete(employee);
 	}
+	
 
 }
